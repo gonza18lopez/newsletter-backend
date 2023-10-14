@@ -3,7 +3,7 @@ import { IsEmail } from "class-validator";
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('increment')
     id: number;
 
     @Column()

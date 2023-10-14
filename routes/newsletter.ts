@@ -3,6 +3,6 @@ import newsletter from "../controllers/newsletter.controller";
 
 const router: Router = Router();
 
-router.post("/", newsletter.join);
+router.post("/", newsletter.subscribe);
 
 export default router;

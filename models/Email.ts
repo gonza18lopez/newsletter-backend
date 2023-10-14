@@ -1,14 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, Generated, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Email {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn('increment')
     id: number;
 
     @Column()
     email: string;
 
     @Column()
+    @Generated("uuid")
     token: string;
 
     @CreateDateColumn()

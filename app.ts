@@ -15,7 +15,12 @@ app.set("port", process.env.SERVER_PORT || 3000);
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+    cors({
+        credentials: true,
+        origin: true,
+    })
+);
 
 // error handling middleware should be loaded after the loading the routes
 if ("development" == app.get("env")) {
