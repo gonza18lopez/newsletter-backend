@@ -1,4 +1,4 @@
-import "reflect-metadata"
+import "reflect-metadata";
 
 import http from "http";
 import express, { Request, Response } from "express";
@@ -6,7 +6,7 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import errorHandler from "errorhandler";
 import cors from "cors";
-
+import { AppDataSource } from "./data-source";
 import routes from "./routes";
 
 const app = express();
@@ -24,15 +24,19 @@ if ("development" == app.get("env")) {
 
 app.get("/", (req: Request, res: Response) => {
     res.json({
-        message: "Newsletter API"
+        message: "Newsletter API",
     });
 });
 
 // register routes
-app.use('/api', routes);
+app.use("/api", routes);
 
-const server = http.createServer(app);
+AppDataSource.initialize()
+    .then(async () => {
+        const server = http.createServer(app);
 
-server.listen(app.get("port"), () => {
-    console.log(`Server listening on port ${app.get("port")}`);
-});
+        server.listen(app.get("port"), () => {
+            console.log(`Server listening on port ${app.get("port")}`);
+        });
+    })
+    .catch((error) => console.log(error));
