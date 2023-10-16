@@ -2,9 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../models/User";
 
-// Secret key for JWT token verification. Keep this key secret.
-const secretKey = process.env.SECRET_KEY as string;
-
 // Custom middleware to require authentication for protected routes.
 export default async function auth(
     req: Request & { user?: any },
