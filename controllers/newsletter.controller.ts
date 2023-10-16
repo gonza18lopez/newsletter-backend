@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
-import { Email } from "../models/Email";
+import { Recipient } from "../models/Recipient";
+
+const repository = AppDataSource.getRepository(Recipient);
 
 export default {
     /**
@@ -21,8 +23,6 @@ export default {
             });
         }
 
-        const repository = AppDataSource.getRepository(Email);
-
         try {
             const findEmail = await repository.findOneBy({
                 email: req.body.email,
@@ -36,9 +36,9 @@ export default {
             }
 
             // Subscribe
-            const email = new Email();
-            email.email = req.body.email;
-            await repository.save(email);
+            const recipient = new Recipient();
+            recipient.email = req.body.email;
+            await repository.save(recipient);
 
             return res.json({
                 message: "You are successfully subscribed",

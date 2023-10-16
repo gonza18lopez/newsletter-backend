@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, Generated, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Email {
+export class Recipient {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
