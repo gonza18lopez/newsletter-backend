@@ -13,7 +13,19 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     },
 });
-const upload = multer({ storage });
+
+const fileFilter = (req: any, file: any, cb: any) => {
+    if (file.mimetype === "image/png" || file.mimetype === "application/pdf") {
+        cb(null, true); // Acepta el archivo
+    } else {
+        cb(null, false); // Rechaza el archivo
+    }
+};
+
+const upload = multer({ storage, fileFilter });
+
+// Endpoint to get all recipients
+router.get("/recipients", auth, NewsletterController.recipients);
 
 // Endpoint to get all newsletters
 router.get("/", auth, NewsletterController.index);

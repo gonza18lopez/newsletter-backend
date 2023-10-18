@@ -40,7 +40,7 @@ export async function store(req: Request, res: Response) {
     try {
         const recipients: Recipient[] = await recipientRepository.find({
             where: {
-                email: In(req.body.recipients),
+                id: In(req.body.recipients),
             },
         });
 
@@ -84,7 +84,7 @@ export async function send(req: Request & { user: User }, res: Response) {
         relations: {
             recipients: true,
             attachment: true,
-        }
+        },
     });
 
     if (!newsletter) {
@@ -95,7 +95,7 @@ export async function send(req: Request & { user: User }, res: Response) {
 
     await transporter.sendMail({
         from: req.user.email,
-        to: "glopez@test.com",
+        to: newsletter.recipients.map((recipient) => recipient.email),
         subject: newsletter.name,
         html: newsletter.body,
         attachments: [
@@ -106,14 +106,17 @@ export async function send(req: Request & { user: User }, res: Response) {
         ],
     });
 
+    newsletter.isSent = true;
+    await newsletterRepository.save(newsletter);
+
     return res.json({
         message: "Newsletter sent successfully",
-    })
+    });
 }
 
 /**
  * Endpoint to delete a newsletter
- * 
+ *
  * @param req Request
  * @param res Response
  * @return Response
@@ -122,7 +125,7 @@ export async function destroy(req: Request, res: Response) {
     const newsletter: Newsletter | null = await newsletterRepository.findOne({
         where: {
             id: req.params.id as any,
-        }
+        },
     });
 
     if (!newsletter) {
@@ -135,7 +138,7 @@ export async function destroy(req: Request, res: Response) {
 
     return res.json({
         message: "Newsletter deleted successfully",
-    })
+    });
 }
 
 /**
@@ -183,4 +186,17 @@ export async function subscribe(req: Request, res: Response) {
             message: "Internal server error",
         });
     }
+}
+
+/**
+ * Endpoint to get all recipients
+ *
+ * @param req Request
+ * @param res Response
+ * @return Response
+ */
+export async function recipients(req: Request, res: Response) {
+    const recipients: Recipient[] = await recipientRepository.find();
+
+    return res.json(recipients);
 }

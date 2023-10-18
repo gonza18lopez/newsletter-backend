@@ -18,7 +18,9 @@ export class Newsletter {
     @PrimaryGeneratedColumn("increment")
     id: number;
 
-    @OneToOne(() => Attachment, (newsletter) => newsletter.newsletter)
+    @OneToOne(() => Attachment, (newsletter) => newsletter.newsletter, {
+        cascade: true,
+    })
     @JoinColumn()
     attachment: Attachment;
 
