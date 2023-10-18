@@ -41,7 +41,7 @@ export class Newsletter {
     isSent: boolean;
 
     @Column("datetime")
-    sendAt: Date;
+    sendAt: Date | string;
 
     @CreateDateColumn()
     createdAt: Date;

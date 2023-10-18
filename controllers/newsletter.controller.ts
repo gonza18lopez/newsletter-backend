@@ -4,7 +4,7 @@ import { Recipient } from "../models/Recipient";
 import { Newsletter } from "../models/Newsletter";
 import { Attachment } from "../models/Attachment";
 import { In } from "typeorm";
-import { transporter } from "../lib/mailer";
+import { sendNewsletter, transporter } from "../lib/mailer";
 import path from "path";
 import { User } from "../models/User";
 
@@ -93,18 +93,7 @@ export async function send(req: Request & { user: User }, res: Response) {
         });
     }
 
-    await transporter.sendMail({
-        from: req.user.email,
-        to: newsletter.recipients.map((recipient) => recipient.email),
-        subject: newsletter.name,
-        html: newsletter.body,
-        attachments: [
-            {
-                filename: path.basename(newsletter.attachment.path),
-                path: `${__dirname}/../${newsletter.attachment.path}`,
-            },
-        ],
-    });
+    await sendNewsletter(newsletter);
 
     newsletter.isSent = true;
     await newsletterRepository.save(newsletter);
