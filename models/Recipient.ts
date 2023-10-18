@@ -1,8 +1,17 @@
-import { Column, CreateDateColumn, Entity, Generated, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    Generated,
+    ManyToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
+import { Newsletter } from "./Newsletter";
 
 @Entity()
 export class Recipient {
-    @PrimaryGeneratedColumn('increment')
+    @PrimaryGeneratedColumn("increment")
     id: number;
 
     @Column()
@@ -11,6 +20,9 @@ export class Recipient {
     @Column()
     @Generated("uuid")
     token: string;
+
+    @ManyToMany(() => Newsletter, (newsletter) => newsletter.recipients)
+    newsletters: Newsletter[];
 
     @CreateDateColumn()
     createdAt: Date;
